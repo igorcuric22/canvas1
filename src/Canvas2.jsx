@@ -51,6 +51,21 @@ function Canvas2(props) {
   drawFillRect(r4Info);
 
     }, [props.p]);
+
+    let i;
+    useEffect(() => {
+        for(i=0;i<=2*Math.PI;i=i+0.01)
+        {
+            console.log(i);
+            const r=(1-Math.cos(i));
+            const x=200+100*r*Math.cos(i);
+            const y=200+100*r*Math.sin(i);
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+            ctx.lineTo(x+1,y+1)
+            ctx.stroke();
+        }
+    },[]);
    
     return (
       <div className="App">
