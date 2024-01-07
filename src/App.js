@@ -1,6 +1,6 @@
 import './App.css';
 import Drawoncanvas from './Canvas1';
-import Canvas3 from './Canvas3';
+import Canvas4 from './Canvas4';
 import { useState } from 'react';
 
 function App() {
@@ -18,7 +18,7 @@ function App() {
   return (
     <div className="App">
       {/* <Drawoncanvas width={500} height={500} /> */}
-      <Canvas3 width={500} height={500} p={p} />
+      <Canvas4 width={500} height={500} p={p} />
       <input type="text" value={valuex} onChange={handleChange}></input>
       <button onClick={handle}>Stisni</button>
     </div>
