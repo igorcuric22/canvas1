@@ -6,7 +6,7 @@ function Canvas4(props) {
     let ctx = null;
     
     useEffect(() => {
-        const canvasEle = canvas.current;
+      const canvasEle = canvas.current;
       canvasEle.width = canvasEle.clientWidth;
       canvasEle.height = canvasEle.clientHeight;
    
