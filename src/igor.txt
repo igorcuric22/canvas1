@@ -52,3 +52,492 @@ function Canvas3(props) {
       </div>
     );
   }
+
+  ///////////////////////////////////////////////////////////////
+
+  import { useEffect,useRef } from "react";
+import './Canvas2.css'
+
+function Canvas4(props) {
+    const canvas = useRef();
+    let ctx = null;
+    
+    useEffect(() => {
+      const canvasEle = canvas.current;
+      canvasEle.width = canvasEle.clientWidth;
+      canvasEle.height = canvasEle.clientHeight;
+   
+      // get context of the canvas
+      ctx = canvasEle.getContext("2d");
+
+      ctx.beginPath();
+      ctx.moveTo(canvasEle.width/2,0);
+      ctx.lineTo(canvasEle.width/2,canvasEle.height);
+      ctx.moveTo(0,canvasEle.height/2);
+      ctx.lineTo(canvasEle.width,canvasEle.height/2);
+      ctx.stroke();
+
+        for(let i=0;i<=2*Math.PI;i=i+0.01)
+        {
+            console.log(i);
+            const r=(1-Math.cos(i));
+            const x=canvasEle.width/2+100*r*Math.cos(i);
+            const y=canvasEle.height/2+100*r*Math.sin(i);
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+            ctx.lineTo(x+1,y+1)
+            ctx.stroke();
+        }
+
+        ctx.beginPath();
+        ctx.font = "48px serif";
+        ctx.fillStyle = "red";
+        ctx.fillText(props.p, 10, 50);
+        ctx.stroke();
+   
+    },[props.p]);
+   
+    return (
+      <div className="App">
+        <h3>Draw a rectangle on Canvas</h3>
+        <canvas ref={canvas} width={props.width} height={props.height}></canvas>
+      </div>
+    );
+  }
+   
+  export default Canvas4;
+
+  ///////////////////////////////////////////////////////////
+
+  import { useEffect,useRef, useState } from "react";
+import './Canvas2.css'
+
+function Canvas5(props) {
+    const canvas = useRef();
+    const [i,setI]=useState(0);
+    let ctx = null;
+
+    let p=Math.PI/360;
+    let ii=0;
+
+    function draw(ii,ctx,canvasEle){
+        const x=100*Math.sin(i)
+        const y=100*Math.cos(i)
+        console.log(x);
+        ctx.beginPath();
+        ctx.moveTo(canvasEle.width/2,canvasEle.height/2);
+        ctx.lineTo(canvasEle.width/2+x,canvasEle.height/2+y);
+        ctx.stroke();
+        
+        setI(ii);
+    }
+
+
+
+    useEffect(() => {
+      const canvasEle = canvas.current;
+      canvasEle.width = canvasEle.clientWidth;
+      canvasEle.height = canvasEle.clientHeight;
+   
+      // get context of the canvas
+      ctx = canvasEle.getContext("2d");
+
+      ctx.beginPath();
+      ctx.moveTo(canvasEle.width/2,0);
+      ctx.lineTo(canvasEle.width/2,canvasEle.height);
+      ctx.moveTo(0,canvasEle.height/2);
+      ctx.lineTo(canvasEle.width,canvasEle.height/2);
+      ctx.stroke();
+
+      
+      
+       setTimeout(()=>{
+        ii+=p;
+        draw(ii,ctx,canvasEle)
+       },100);
+
+        ctx.beginPath();
+        ctx.font = "48px serif";
+        ctx.fillStyle = "red";
+        ctx.fillText(props.p, 10, 50);
+        ctx.stroke();
+   
+    },[props.p,draw,i]);
+   
+    return (
+      <div className="App">
+        <h3>Draw a rectangle on Canvas {i}</h3>
+        <canvas ref={canvas} width={props.width} height={props.height}></canvas>
+      </div>
+    );
+  }
+   
+  export default Canvas5;
+
+  //////////////////////////////////////////////////////////////////
+
+  import React, { useState, useEffect } from 'react';
+
+const Canvas6 = () => {
+  const [countdown, setCountdown] = useState(5);
+
+  useEffect(() => {
+    const countdownInterval = setInterval(() => {
+      // Decrease the countdown value every second
+      setCountdown((prevCountdown) => prevCountdown - 1);
+    }, 1000);
+
+    // Cleanup function to clear the interval when the component unmounts
+    return () => clearInterval(countdownInterval);
+  }, []); // Empty dependency array ensures the effect runs only once
+
+  useEffect(() => {
+    // Use setTimeout to reset the countdown after it reaches 0
+    if (countdown === 0) {
+      setTimeout(() => {
+        setCountdown(5); // Reset the countdown to 5 seconds
+      }, 2000); // Delay before resetting (2 seconds)
+    }
+  }, [countdown]); // Effect re-runs whenever countdown changes
+
+  return (
+    <div>
+      <h2>Countdown: {countdown}</h2>
+    </div>
+  );
+};
+
+
+
+export default Canvas6;
+
+///////////////////////////////////////////////////
+
+import './App.css';
+import Drawoncanvas from './Canvas1';
+import Canvas6 from './Canvas6';
+import { useState } from 'react';
+
+function App() {
+  const [p,setP]=useState(45);
+  const [valuex,setValuex]=useState("");
+
+  const handleChange=(e)=>{
+    setValuex(e.target.value);
+  }
+
+  const handle=()=>{
+    setP(valuex);
+  }
+
+  return (
+    <div className="App">
+      {/* <Drawoncanvas width={500} height={500} /> */}
+      <Canvas6 width={500} height={500} p={p} />
+      <input type="text" value={valuex} onChange={handleChange}></input>
+      <button onClick={handle}>Stisni</button>
+    </div>
+  );
+}
+
+export default App;
+
+/////////////////////////////////////////////////////////////////
+
+import React, { useState, useEffect } from 'react';
+
+const DelayedMessage = () => {
+  const [message, setMessage] = useState('');
+
+  useEffect(() => {
+    // Use setTimeout to update the message after 2000 milliseconds (2 seconds)
+    const timeoutId = setTimeout(() => {
+      setMessage('Delayed message after 2 seconds!');
+    }, 2000);
+
+    // Cleanup function to clear the timeout if the component unmounts
+    return () => clearTimeout(timeoutId);
+  }, []); // Empty dependency array ensures the effect runs only once
+
+  return (
+    <div>
+      <h1>{message}</h1>
+    </div>
+  );
+};
+
+function App() {
+  return (
+    <div className="App">
+      <DelayedMessage />
+    </div>
+  );
+}
+
+export default App;
+
+///////////////////////////////////////////////////////////
+
+import React, { useState } from 'react';
+
+const DelayedAction = () => {
+  const [actionStatus, setActionStatus] = useState('Idle');
+  const [delayDuration, setDelayDuration] = useState(3000);
+
+  const handleButtonClick = () => {
+    setActionStatus('Action in progress...');
+
+    // Use setTimeout to simulate a delayed action
+    setTimeout(() => {
+      setActionStatus('Action completed!');
+    }, delayDuration);
+  };
+
+  return (
+    <div>
+      <p>Status: {actionStatus}</p>
+      <button onClick={handleButtonClick}>Trigger Delayed Action</button>
+      <input
+        type="number"
+        value={delayDuration}
+        onChange={(e) => setDelayDuration(parseInt(e.target.value, 10))}
+      />
+    </div>
+  );
+};
+
+export default DelayedAction;
+
+/////////////////////////////////////////////////////////////
+
+import React, { useState } from 'react';
+
+const DelayedAction = () => {
+  const [actionStatus, setActionStatus] = useState('Idle');
+  const [delayDuration, setDelayDuration] = useState(3000);
+
+  const handleButtonClick = () => {
+    setActionStatus('Action in progress...');
+
+    // Use setTimeout to simulate a delayed action
+    setTimeout(() => {
+      setActionStatus('Action completed!');
+    }, delayDuration);
+  };
+
+  return (
+    <div>
+      <p>Status: {actionStatus}</p>
+      <button onClick={handleButtonClick}>Trigger Delayed Action</button>
+      <input
+        type="number"
+        value={delayDuration}
+        onChange={(e) => setDelayDuration(parseInt(e.target.value, 10))}
+      />
+    </div>
+  );
+};
+
+
+
+
+function App() {
+  return (
+    <div className="App">
+      <DelayedAction  />
+    </div>
+  );
+}
+
+export default App;
+
+///////////////////////////////////////////////////////////
+
+import React, { useState, useEffect } from 'react';
+
+const Countdown = () => {
+  const [countdown, setCountdown] = useState(5);
+
+  useEffect(() => {
+    const countdownInterval = setInterval(() => {
+      // Decrease the countdown value every second
+      setCountdown((prevCountdown) => prevCountdown - 1);
+    }, 1000);
+
+    // Cleanup function to clear the interval when the component unmounts
+    return () => clearInterval(countdownInterval);
+  }, []); // Empty dependency array ensures the effect runs only once
+
+  useEffect(() => {
+    // Use setTimeout to reset the countdown after it reaches 0
+    if (countdown === 0) {
+      setTimeout(() => {
+        setCountdown(5); // Reset the countdown to 5 seconds
+      }, 2000); // Delay before resetting (2 seconds)
+    }
+  }, [countdown]); // Effect re-runs whenever countdown changes
+
+  return (
+    <div>
+      <h2>Countdown: {countdown}</h2>
+    </div>
+  );
+};
+
+function App() {
+  return (
+    <div className="App">
+      <Countdown />
+    </div>
+  );
+}
+
+export default App;
+
+///////////////////////////////////////////////////////////
+
+import React, { useState, useEffect } from 'react';
+
+const Countdown = () => {
+  const [countdown, setCountdown] = useState(5);
+
+  useEffect(() => {
+    const countdownInterval = setTimeout(() => {
+      // Decrease the countdown value every second
+      setCountdown((prevCountdown) => prevCountdown + 1);
+    }, 1000);
+
+    // Cleanup function to clear the interval when the component unmounts
+    return () => clearInterval(countdownInterval);
+  }, [countdown]); // Empty dependency array ensures the effect runs only once
+
+  // useEffect(() => {
+  //   // Use setTimeout to reset the countdown after it reaches 0
+  //   if (countdown === 0) {
+  //     setTimeout(() => {
+  //       setCountdown(5); // Reset the countdown to 5 seconds
+  //     }, 2000); // Delay before resetting (2 seconds)
+  //   }
+  // }, [countdown]); // Effect re-runs whenever countdown changes
+
+  return (
+    <div>
+      <h2>Countdown: {countdown}</h2>
+    </div>
+  );
+};
+
+function App() {
+  return (
+    <div className="App">
+      <Countdown />
+    </div>
+  );
+}
+
+export default App;
+
+/////////////////////////////////////////////////////////////
+
+import React, { useState, useEffect, useRef } from 'react';
+
+const Countdown = () => {
+  const [countdown, setCountdown] = useState(0);
+  let [i, setI] = useState(0);
+  const canvas= useRef(null);
+
+  let p=Math.PI/720;
+  let ii=0;
+  useEffect(() => {
+    // const canvasEle = canvas.current;
+    //   canvasEle.width = canvasEle.clientWidth;
+    //   canvasEle.height = canvasEle.clientHeight;
+   
+    //   // get context of the canvas
+    //   const ctx = canvasEle.getContext("2d");
+
+    //   ctx.beginPath();
+    //   ctx.moveTo(canvasEle.width/2,0);
+    //   ctx.lineTo(canvasEle.width/2,canvasEle.height);
+    //   ctx.moveTo(0,canvasEle.height/2);
+    //   ctx.lineTo(canvasEle.width,canvasEle.height/2);
+    //   ctx.stroke();
+
+
+
+
+    const countdownInterval = setTimeout(() => {
+      // Decrease the countdown value every second
+      //setI(ii=>ii+p);
+      // const r=100;
+      //       const x1=r*Math.cos(i);
+      //       const y1=r*Math.sin(i);
+      //       console.log(i,x1,y1);
+      //       ctx.beginPath();
+      //       ctx.moveTo(canvasEle.width/2,canvasEle.height/2);
+      //       ctx.lineTo(canvasEle.width/2+x1,canvasEle.height/2+y1)
+      //       ctx.stroke();
+      setCountdown((prevCountdown) => prevCountdown + 1);
+    }, 1000);
+
+    // Cleanup function to clear the interval when the component unmounts
+    return () => clearInterval(countdownInterval);
+  }, [countdown]); // Empty dependency array ensures the effect runs only once
+  
+                                                                                                                                                                               
+
+  useEffect(() => {
+    
+      // get context of the canvas
+      const canvasEle = canvas.current;
+      canvasEle.width = canvasEle.clientWidth;
+      canvasEle.height = canvasEle.clientHeight;
+      let ctx = canvasEle.getContext("2d");  
+     
+
+      ctx.beginPath();
+      ctx.moveTo(canvasEle.width/2,0);
+      ctx.lineTo(canvasEle.width/2,canvasEle.height);
+      ctx.moveTo(0,canvasEle.height/2);
+      ctx.lineTo(canvasEle.width,canvasEle.height/2);
+      ctx.stroke();
+
+      const r=250;
+      const x1=r*Math.cos(i);
+      const y1=r*Math.sin(i);
+      console.log(i,x1,y1);
+      ctx.beginPath();
+      ctx.moveTo(canvasEle.width/2,canvasEle.height/2);
+      ctx.lineTo(canvasEle.width/2+x1,canvasEle.height/2+y1)
+      ctx.stroke();
+
+      setTimeout(() => {
+        // Decrease the countdown value every second
+        setI(ii=>ii+p);
+       
+        
+      }, 250);
+
+},[i])
+
+  return (
+    <div>
+      <h2>Countdown: {countdown}</h2>
+      <h3>Angle: {i}</h3>
+      <canvas ref={canvas} width={500} height={500}></canvas>
+    </div>
+  );
+};
+
+function App() {
+  return (
+    <div className="App">
+      <Countdown />
+    </div>
+  );
+}
+
+export default App;
+
+////////////////////////////////////////////////////////////////
+
